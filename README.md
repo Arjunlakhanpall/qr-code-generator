@@ -1,6 +1,8 @@
 # QR Code Generator
 
 A lightweight web application for generating QR codes from text or URLs, hosted at 
+
+
 [![Visit Live Site](https://img.shields.io/badge/Visit-Live%20Site-brightgreen?style=for-the-badge)](https://arjunlakhanpall.github.io/qr-code-generator/)
 
 
