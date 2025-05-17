@@ -1,54 +1,104 @@
-const generateBtn = document.getElementById('generate');
-const qrContainer = document.getElementById('qrcode');
-const downloadBtn = document.getElementById('download');
-let qrCodeInstance = null;
+/* Reset some defaults */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+  min-height: 100vh;
+}
 
-generateBtn.addEventListener('click', () => {
-  const text = document.getElementById('text').value.trim();
-  qrContainer.innerHTML = "";
-  downloadBtn.style.display = "none";
+/* Center everything */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-  if (text.length === 0) {
-    alert("Please enter text or URL.");
-    return;
+/* Glassmorphism Card */
+.qr-card {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.3s;
+}
+
+.qr-card:hover {
+  box-shadow: 0 16px 40px 0 rgba(31,38,135,0.45);
+}
+
+h1 {
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+/* Input styling */
+input[type="text"] {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  margin-bottom: 1.2rem;
+  width: 260px;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: background 0.2s;
+}
+
+input[type="text"]:focus {
+  background: #fff;
+}
+
+/* Button styling */
+button {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  color: #222;
+  border: none;
+  border-radius: 12px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+button:hover {
+  background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+  color: #000;
+}
+
+/* Center the QR code */
+#qrcode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .qr-card {
+    padding: 1rem;
+    width: 90vw;
   }
-
-  qrCodeInstance = new QRCode(qrContainer, {
-    text: text,
-    width: 200,
-    height: 200,
-    colorDark: "#22223b",
-    colorLight: "#fff",
-    correctLevel: QRCode.CorrectLevel.H
-  });
-
-  // Show download button after QR is generated
-  setTimeout(() => {
-    downloadBtn.style.display = "inline-block";
-  }, 300);
-});
-
-downloadBtn.addEventListener('click', () => {
-  if (!qrCodeInstance) return;
-  // Find the generated QR code <img>
-  const img = qrContainer.querySelector('img');
-  if (img) {
-    const link = document.createElement('a');
-    link.href = img.src;
-    link.download = 'qrcode.png';
-    link.click();
-  } else {
-    // If SVG is generated (fallback)
-    const svg = qrContainer.querySelector('svg');
-    if (svg) {
-      const serializer = new XMLSerializer();
-      const svgBlob = new Blob([serializer.serializeToString(svg)], {type: 'image/svg+xml'});
-      const url = URL.createObjectURL(svgBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'qrcode.svg';
-      link.click();
-      URL.revokeObjectURL(url);
-    }
+  input[type="text"] {
+    width: 80vw;
   }
-});
+}
